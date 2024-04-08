@@ -1,4 +1,4 @@
-{% load static %}
+{% load grid_tags static %}
 <!DOCTYPE html>
 <html lang="pt-Br">
   <head>
@@ -19,7 +19,7 @@
   <body>
     <!-- NavBar -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" aria-label="Navbar">
-      <div class="container-fluid">
+      {% container %}
         <a class="navbar-brand" href="{% url 'index' %}">
           <img src="{% static 'img/logo.jpg' %}" alt="" style="width: 150px;">
         </a>
@@ -32,10 +32,28 @@
               <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
             </li> 
           </ul>
+          <ul class="navbar-nav ms-auto">
+            {% if request.user.is_authenticated %}
+              {% if request.user.is_superuser %}
+                <li class='nav-item'>
+                  <a class='nav-link' href="admin">Admin</a>
+                </li>
+              {% endif %} 
+              <li class='nav-item'>
+                <a class='nav-link' href="{% url 'logout' %}">Sair</a>
+              </li>  
+            {% else %}
+              <li class='nav-item'>
+                <a class='nav-link' href="{% url 'signup' %}">Cadastrar</a>
+              </li>
+              <li class='nav-item'>
+                <a class='nav-link' href="{% url 'login' %}">Entrar</a>
+              </li>
+            {% endif %}
+          </ul>
         </div>
-      </div>
+      {% endcontainer %}
     </nav>
-
     <!-- Index Content -->
     {% block content %}
     {% endblock content %}
