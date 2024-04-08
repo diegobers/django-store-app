@@ -1,0 +1,23 @@
+{% load grid_tags static %}
+
+
+<!-- Footer -->
+{% container %}
+  {% row 'pt-5 my-5 justify-content-center row-cols-1 row-cols-sm-2 row-cols-md-5 border-top border-secundary' %}
+    {% col %}
+      <a href="{% url 'index' %}" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
+      <img src="{% static 'img/favicon.ico' %}" alt="" class="logo">
+      </a>
+    {% endcol %}
+    {% col %}
+      <h5>Contato</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2"><a href="https://web.whatsapp.com" target="_blank" class="nav-link p-0 text-body-secondary"><i class="fa-brands fa-whatsapp"></i> (48) 99999-9999</a></li>
+        <li class="nav-item mb-2"><a href="mailto:email@admin.com" class="nav-link p-0 text-body-secondary"><i class="fa-solid fa-envelope-circle-check"></i> email@admin.com</a></li>
+      </ul>
+    {% endcol %}
+  {% endrow %}
+{% endcontainer %}
+<div class="pt-2 pb-4 text-center border-top border-secundary">
+  Desenvolvido por <a href="https://github.com/diegobers" target="_blank"><i class="fa-brands fa-github"></i> Diego Bernardi</a>
+</div>
