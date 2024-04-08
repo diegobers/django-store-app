@@ -1,0 +1,37 @@
+{% extends 'layouts/base.html' %}
+
+{% load grid_tags %}
+
+{% block title %}Faça Seu Cadastro{% endblock %}
+
+
+{% block content %}
+<section>
+	{% container %}
+	  {% row 'justify-content-center' %}
+			{% col 'col-lg-4 col-md-7' %}
+				<div class="card border-0 mb-0">
+					<div class="card-header bg-transparent">
+						<h5 class="text-dark text-center mt-2 mb-3">Cadastro</h5>
+						<div class="btn-wrapper text-center">
+							<a href="#" class="btn btn-neutral btn-icon btn-sm mb-0">
+	              <i class="fa-brands fa-google"></i> Google
+	            </a>
+						</div>
+					</div>
+					<div class="card-body px-lg-5 pt-0">
+						<div class="text-center text-muted mb-4">
+							<small>Cadastrar Login/Senha </small>
+						</div>
+						<form class="signup" method="POST" action="{% url 'signup' %}">
+	            {% csrf_token %}
+	            {{ form }}
+	            <button type="submit">Cadastrar</button>         
+	          </form>
+					</div>
+				</div>
+		  {% endcol %}
+	  {% endrow %}
+	{% endcontainer %}
+</section>
+{% endblock content %}
