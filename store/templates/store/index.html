@@ -1,34 +1,35 @@
 {% extends 'layouts/base.html' %} 
 
-{% load static %}
+{% load grid_tags static %}
 
 {% block title %}Home{% endblock %}
 
 
 {% block content %}
-<section id="pizzas" class="py-1">
-  <div class="container">
+<!-- Pizzas Section -->
+<section>
+  {% container %}
     <h3 class="text-center mb-3">Pizzas</h3>
-    <div class="row">
+    {% row %}
       {% if products %}
         {% for product in products %}
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">{{ product.name }}</h5>
-              <p class="card-text">Price: ${{ product.price }}</p>
-              <a href="#" class="btn btn-primary">Add to Cart</a>
+          {% col 'col-md-4' %}
+            <div class="card mb-4">
+              <img src="..." class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">Price: ${{ product.price }}</p>
+                <a href="#" class="btn btn-primary">Add to Cart</a>
+              </div>
             </div>
-          </div>
-        </div>
+          {% endcol %}
         {% endfor %}
       {% else %}
-        <div class="col-md-12 my-2">
+        {% col 'col-md-12 my-2' %}
           <p>No Products !!!</p>
-        </div>
+        {% endcol %}
       {% endif %}
-    </div> 
-  </div> 
+    {% endrow %}
+  {% endcontainer %}
 </section>
 {% endblock content %}
