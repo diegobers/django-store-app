@@ -1,0 +1,7 @@
+@charset "UTF-8";
+/* Global CSS Settings */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
