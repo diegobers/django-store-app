@@ -8,7 +8,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+INTERNAL_IPS = [ '127.0.0.1' ]
+
 AUTH_USER_MODEL = 'accounts.AuthAbstractUser'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Application definition
 INSTALLED_APPS = [
@@ -18,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'store',
     'accounts',
     'allauth',
@@ -36,6 +41,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -124,16 +130,15 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Provider Specific Settings
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
-        'APP': {
-            'client_id': '123',
-            'secret': '456',
-            'key': ''
-        }
-    }
-}
-
+#SOCIALACCOUNT_PROVIDERS = {
+#    'google': {
+#        # For each OAuth based provider, either add a ``SocialApp``
+#        # (``socialaccount`` app) containing the required client
+#        # credentials, or list them here:
+#        'APP': {
+#            'client_id': '123',
+#            'secret': '456',
+#            'key': ''
+#        }
+#    }
+#}
