@@ -1,0 +1,26 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Carrinho{% endblock %}
+
+
+{% block content %}
+   <h1>Cart</h1>
+    {% if cart_items %}
+        <ul>
+            {% for item in cart_items %}
+                <li>{{ item.product.name }} - Quantity: {{ item.quantity }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+
+
+
+    <h1>Shopping Cart</h1>
+    <ul>
+        {% for cart_item in cart_items %}
+            <li>{{ cart_item.product.name }} - Quantity: {{ cart_item.quantity }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
