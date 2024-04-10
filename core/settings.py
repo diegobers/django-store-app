@@ -113,9 +113,9 @@ STORAGES = {
 }
 
 # Auth with django-allauth
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'index'
-LOGOUT_REDIRECT_URL = 'index'
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'store:index'
+LOGOUT_REDIRECT_URL = 'store:index'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True

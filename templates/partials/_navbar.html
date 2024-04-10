@@ -2,9 +2,9 @@
 
 
 <!-- NavBar -->
-<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" aria-label="Navbar">
+<nav class="navbar navbar-expand-sm bg-body-tertiary sticky-top" aria-label="Navbar">
   {% container %}
-    <a class="navbar-brand" href="{% url 'index' %}">
+    <a class="navbar-brand" href="{% url 'store:index' %}">
       <img src="{% static 'img/logo.jpg' %}" alt="" style="width: 150px;">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,12 +13,12 @@
     <div class="collapse navbar-collapse" id="navbarHeader">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+          <a class="nav-link active" aria-current="page" href="{% url 'store:index' %}">Home</a>
         </li> 
       </ul>
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'view_cart' %}">Carrinho</a>
+          <a class="nav-link" href="{% url 'store:view_cart' %}">Carrinho</a>
         </li>
         {% if request.user.is_authenticated %}
           {% if request.user.is_superuser %}
@@ -27,14 +27,14 @@
             </li>
           {% endif %} 
           <li class='nav-item'>
-            <a class='nav-link' href="{% url 'logout' %}">Sair</a>
+            <a class='nav-link' href="{% url 'accounts:logout' %}">Sair</a>
           </li>  
         {% else %}
           <li class='nav-item'>
-            <a class='nav-link' href="{% url 'signup' %}">Cadastrar</a>
+            <a class='nav-link' href="{% url 'accounts:signup' %}">Cadastrar</a>
           </li>
           <li class='nav-item'>
-            <a class='nav-link' href="{% url 'login' %}">Entrar</a>
+            <a class='nav-link' href="{% url 'accounts:login' %}">Entrar</a>
           </li>
         {% endif %}
       </ul>

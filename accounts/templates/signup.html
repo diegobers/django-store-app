@@ -23,7 +23,7 @@
 						<div class="text-center text-muted mb-4">
 							<small>Cadastrar Login/Senha </small>
 						</div>
-						<form class="signup" method="POST" action="{% url 'signup' %}">
+						<form class="signup" method="POST" action="{% url 'accounts:signup' %}">
 	            {% csrf_token %}
 	            {{ form }}
 	            <button type="submit">Cadastrar</button>         

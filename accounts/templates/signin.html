@@ -23,7 +23,7 @@
             <div class="text-center text-muted mb-4">
               <small>Entrar com seu Login</small>
             </div> 
-            <form class="login" method="POST" action="{% url 'login' %}">
+            <form class="login" method="POST" action="{% url 'accounts:login' %}">
               {% csrf_token %}
               {{ form }}
               <button type="submit">Entrar</button>
