@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.generic import ListView, TemplateView, View
-
+from django.views.generic import ListView, TemplateView, View, CreateView
+from django.shortcuts import get_object_or_404, redirect
 from .models import Product, Cart, CartItem
 
 
@@ -18,31 +18,45 @@ class CartView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        session_key = self.request.session.session_key
+        
         if self.request.user.is_authenticated:
             cart_items = CartItem.objects.filter(cart__user=self.request.user)
         else:
+            session_key = self.request.session.session_key
             cart_items = CartItem.objects.filter(cart__session_key=session_key)
+        
         context['cart_items'] = cart_items
         
         return context
 
-    def post(self, request, *args, **kwargs):
-        product_id = request.POST.get('product_id')
+class AddToCartView(View):
+    def post(self, request, pk):
+        product = Product.objects.get(pk=pk)
         quantity = int(request.POST.get('quantity', 1))
-        product = Product.objects.get(pk=product_id)
+        user = request.user
         session_key = request.session.session_key
 
-        if request.user.is_authenticated:
-            cart_item, _ = CartItem.objects.get_or_create(cart__user=request.user, product=product)
+        if user.is_authenticated:
+            cart, created = Cart.objects.get_or_create(user=user)
         else:
-            cart_item, _ = CartItem.objects.get_or_create(cart__session_key=session_key, product=product)
-        cart_item.quantity += quantity
-        cart_item.save()
-        
-        return redirect('cart')
+            cart, created = Cart.objects.get_or_create(session_key=session_key)
 
-class AddToCartView(View):
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=cart,
+            product=product
+        )
+
+        if not created:
+            cart_item.quantity += quantity
+        else:
+            cart_item.quantity = quantity
+        cart_item.save()
+
+        return redirect('store:index')
+
+
+
+class AddToCartView2(View):
     def post(self, request):
         product_id = request.POST.get('product_id')
         quantity = int(request.POST.get('quantity', 1))
