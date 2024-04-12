@@ -8,6 +8,7 @@
 {% block content %}
 <!-- Pizzas Section -->
 <section>
+
   {% container %}
     <h3 class="text-center mb-3">Pizzas</h3>
     {% row %}
@@ -20,10 +21,12 @@
                 <h5 class="card-title">{{ product.name }}</h5>
                 <p class="card-text">Price: ${{ product.price }}</p>
 
-                <form method="post" action="{% url 'store:add_cart' pk=product.pk %}">
+                <form method="post" action="{% url 'store:add_cart' %}">
                   {% csrf_token %}
-                    <input type="number" name="quantity" value="1" min="1">
-                    <button type="submit">Add to Cart</button>
+                  <input type="hidden" name="quantity" value="1">
+
+                  <input type="hidden" name="product_id" value="{{ product.id }}">
+                  <button type="submit">Add to Cart</button>
                 </form>
 
               </div>
@@ -36,6 +39,20 @@
         {% endcol %}
       {% endif %}
     {% endrow %}
+
+  <hr>
+
+  <p>session session_key</p>
+  {{ request.session.session_key }}
+  <hr>
+
+  <p>just COOCKIES</p>
+  {{ request.COOKIES }}
+  <hr>
+  
+  <p> COOCKIES csrftoken</p>
+  {{ request.COOKIES.csrftoken }}
+
   {% endcontainer %}
 </section>
 {% endblock content %}

@@ -12,6 +12,10 @@ INTERNAL_IPS = [ '127.0.0.1' ]
 
 AUTH_USER_MODEL = 'accounts.AuthAbstractUser'
 
+SESSION_COOKIE_NAME = 'store'
+
+#SESSION_SAVE_EVERY_REQUEST = True
+
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Application definition

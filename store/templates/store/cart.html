@@ -1,9 +1,16 @@
 {% extends 'layouts/base.html' %}
 
+{% load grid_tags %}
+
 {% block title %}Carrinho{% endblock %}
 
 
 {% block content %}
+  
+  {% container %}
+
+ 
+
    <h1>Carrinho</h1>
     {% if cart_items %}
         <ul>
@@ -14,5 +21,17 @@
     {% else %}
         <p>Carrinho Vazio...</p>
     {% endif %}
+
+
+  <hr>
+  <p>session session_key</p>
+  {{ request.session.session_key }}
+  <hr>
+
+  <p> csrf COOCKIES</p>
+  {{ request.COOKIES }}
+  <hr>
+  {% endcontainer %}
+
 
 {% endblock %}

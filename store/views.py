@@ -4,60 +4,87 @@ from django.views.generic import ListView, TemplateView, View, CreateView
 from django.shortcuts import get_object_or_404, redirect
 from .models import Product, Cart, CartItem, Order, OrderItem
 from .forms import ShippingForm
+from django.contrib.sessions.models import Session
+from django.contrib.sessions.backends.base import SessionBase
+from django.contrib.sessions.backends.db import SessionStore
 
-
-class StoreIndexView(TemplateView):
+class StoreIndexView(ListView):
+    model = Product
     template_name = 'store/index.html'
+    context_object_name = 'products'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['products'] = Product.objects.all()
-        return context
+class CartView(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            cart = Cart.objects.filter(user=request.user)
+            cart_items = CartItem.objects.filter(cart=cart)
+        else:
+            session_key = request.session.session_key
+            cart = Cart.objects.get_or_create(session_key=session_key)
+            cart_items = CartItem.objects.filter(cart=cart)
+        
+        return render(request, 'store/cart.html', {'cart_items': cart_items})
 
-class CartView(TemplateView):
+
+class CartView2(TemplateView):
     template_name = 'store/cart.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+
         if self.request.user.is_authenticated:
             cart_items = CartItem.objects.filter(cart__user=self.request.user)
         else:
             session_key = self.request.session.session_key
+            print('//////////////get context//////////////////////')
+            print(session_key)
             cart_items = CartItem.objects.filter(cart__session_key=session_key)
+        
         context['cart_items'] = cart_items
         
         return context
 
 class AddToCartView(View):
-    def post(self, request, pk):
-        product = Product.objects.get(pk=pk)
-        quantity = int(request.POST.get('quantity', 1))
-        user = request.user
-        session_key = request.session.session_key
+    def post(self, request):
+        product_id = request.POST.get('product_id')
+        qty = int(request.POST.get('quantity', 1))
+        product = Product.objects.get(id=product_id)
 
-        if user.is_authenticated:
-            cart, created = Cart.objects.get_or_create(user=user)
-        else:
-            cart, created = Cart.objects.get_or_create(session_key=session_key)
 
-        cart_item, created = CartItem.objects.get_or_create(
-            cart=cart,
-            product=product
-        )
-
-        if not created:
-            cart_item.quantity += quantity
-        else:
-            cart_item.quantity = quantity
+        if request.user.is_authenticated:
+            cart, created = Cart.objects.get_or_create(user=request.user)
+        
+        if request.user.is_anonymous:
+            if request.session.session_key:
+                cart = Cart.objects.get(session_key=request.session.session_key)
+            else:
+                session_store = SessionStore()
+                session_store.save()
+                session_key = session_store.session_key
+                request.session = session_store
+                
+                cart = Cart.objects.create(session_key=session_store.session_key) 
+        
+        cart_item = CartItem.objects.create(cart=cart, product=product, quantity=qty)
         cart_item.save()
 
-        return redirect('store:index')
+        return redirect('store:view_cart2')
+
+
 
 class RemoveFromCartView(View):
     def post(self, request):
         cart_item_id = request.POST.get('cart_item_id')
         CartItem.objects.filter(id=cart_item_id).delete()
+        return JsonResponse({'success': True}) 
+
+class UpdateQuantityView(View):
+    def post(self, request):
+        cart_item_id = request.POST.get('cart_item_id')
+        quantity = int(request.POST.get('quantity'))
+        cart_item = CartItem.objects.get(id=cart_item_id)
+        cart_item.quantity = quantity
+        cart_item.save()
         return JsonResponse({'success': True})
 
 class CheckoutView(TemplateView):

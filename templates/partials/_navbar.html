@@ -18,7 +18,13 @@
       </ul>
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'store:view_cart' %}">{{ request.user }} Carrinho</a>
+          <p>{{ request.user }} -</p>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'store:view_cart' %}">Carrinho</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'store:view_cart2' %}">Carrinho2</a>
         </li>
         {% if request.user.is_authenticated %}
           {% if request.user.is_superuser %}
