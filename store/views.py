@@ -7,52 +7,38 @@ from .forms import ShippingForm
 from django.contrib.sessions.models import Session
 from django.contrib.sessions.backends.base import SessionBase
 from django.contrib.sessions.backends.db import SessionStore
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 class StoreIndexView(ListView):
     model = Product
     template_name = 'store/index.html'
     context_object_name = 'products'
 
-class CartView(View):
-    def get(self, request):
-        if request.user.is_authenticated:
-            cart = Cart.objects.filter(user=request.user)
-            cart_items = CartItem.objects.filter(cart=cart)
-        else:
-            session_key = request.session.session_key
-            cart = Cart.objects.get_or_create(session_key=session_key)
-            cart_items = CartItem.objects.filter(cart=cart)
-        
-        return render(request, 'store/cart.html', {'cart_items': cart_items})
-
-
-class CartView2(TemplateView):
+class CartView(ListView):
+    model = CartItem
     template_name = 'store/cart.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    context_object_name = 'cart_items'
 
+    def get_queryset(self):
         if self.request.user.is_authenticated:
-            cart_items = CartItem.objects.filter(cart__user=self.request.user)
+            return CartItem.objects.filter(cart__user=self.request.user)
+
+        if self.request.user.is_anonymous:
+            if self.request.session.session_key:
+                return CartItem.objects.filter(cart__session_key=self.request.session.session_key)
         else:
-            session_key = self.request.session.session_key
-            print('//////////////get context//////////////////////')
-            print(session_key)
-            cart_items = CartItem.objects.filter(cart__session_key=session_key)
-        
-        context['cart_items'] = cart_items
-        
-        return context
+            return redirect('store:view_cart') 
 
 class AddToCartView(View):
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         product_id = request.POST.get('product_id')
         qty = int(request.POST.get('quantity', 1))
         product = Product.objects.get(id=product_id)
 
-
         if request.user.is_authenticated:
-            cart, created = Cart.objects.get_or_create(user=request.user)
+            cart, _ = Cart.objects.get_or_create(user=request.user)
         
         if request.user.is_anonymous:
             if request.session.session_key:
@@ -61,16 +47,14 @@ class AddToCartView(View):
                 session_store = SessionStore()
                 session_store.save()
                 session_key = session_store.session_key
-                request.session = session_store
                 
+                request.session = session_store
                 cart = Cart.objects.create(session_key=session_store.session_key) 
         
-        cart_item = CartItem.objects.create(cart=cart, product=product, quantity=qty)
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product, quantity=qty)
         cart_item.save()
 
-        return redirect('store:view_cart2')
-
-
+        return redirect('store:view_cart')
 
 class RemoveFromCartView(View):
     def post(self, request):

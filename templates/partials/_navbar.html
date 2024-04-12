@@ -22,10 +22,7 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'store:view_cart' %}">Carrinho</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'store:view_cart2' %}">Carrinho2</a>
-        </li>
+        </li> 
         {% if request.user.is_authenticated %}
           {% if request.user.is_superuser %}
             <li class='nav-item'>
