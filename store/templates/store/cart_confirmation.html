@@ -1,15 +1,8 @@
 {% extends 'layouts/base.html' %}
 
-{% load grid_tags %}
-
-{% block title %}Carrinho{% endblock %}
-
 
 {% block content %}
-  
-  {% container %}
-
- 
+<h1>Resumo do Pedido</h1>
 
    <h1>Carrinho</h1>
     {% if cart_items %}
@@ -18,10 +11,9 @@
                 <li>{{ item.product.name }} - Qtd: {{ item.quantity }}</li>
             {% endfor %}
         </ul>
-
-    <form method="post" action="{% url 'store:confirm_cart' %}">
+    <form method="post" action="{% url 'store:order_confirmation' %}">
         {% csrf_token %}
-        <button type="submit">Finalizar Carrinho</button>
+        <button type="submit">Finalizar</button>
     </form>
     {% else %}
         <p>Carrinho Vazio...</p>

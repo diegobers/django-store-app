@@ -5,10 +5,7 @@
 <h1>Checkout</h1>
 <form method="post">
     {% csrf_token %}
-    <h2>Shipping Information</h2>
-    {{ shipping_form.as_p }}
-    <h2>Payment Information</h2>
-    {{ payment_form.as_p }}
+    
     <button type="submit" class="btn btn-primary">Place Order</button>
 </form>
 {% endblock %}
