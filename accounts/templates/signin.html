@@ -12,7 +12,7 @@
       {% col 'col-lg-4 col-md-7' %}
         <div class="card border-0 mb-0">
           <div class="card-header bg-transparent">
-            <h5 class="text-dark text-center mt-2 mb-3">Entrar</h5>
+            <h5 class="text-dark text-center mt-2 mb-3">CusTOMM</h5>
             <div class="btn-wrapper text-center">
               <a href="#" class="btn btn-neutral btn-icon btn-sm mb-0">
                 <i class="fa-brands fa-google"></i> Google
@@ -26,12 +26,22 @@
             <form class="login" method="POST" action="{% url 'accounts:login' %}">
               {% csrf_token %}
               {{ form }}
-              <button type="submit">Entrar</button>
+              <button type="submit">Entrare</button>
             </form>
           </div>
         </div>
       {% endcol %}
     {% endrow %}
+
+
+  <hr>
+  <p>session session_key</p>
+  {{ request.session.session_key }}
+  <hr>
+
+  <p> last_session_key</p>
+  {{ request.session.last_session_key }}
+  <hr>
   {% endcontainer %}
 </section>  
 {% endblock content %}
